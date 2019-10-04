@@ -34,6 +34,7 @@ class Cleanup
     {
         if ($this->helperData->isEnabled())
         {
+            $this->helperData->log("");
             $this->helperData->log("--- Starting Log File Cleanup ---");
             $counter = 0;
             try {
@@ -47,11 +48,11 @@ class Cleanup
                     {
                         $this->helperData->deleteFile($file);
                         $counter++;
-                        $this->helperData->log("Deleted $file of size $size" . "MB");
+                        $this->helperData->log("---- Deleted $file of size $size" . "MB ----");
                     }                
                 }
                 
-                $message = ($counter == 0 ? "No" : $counter) . " log files deleted";
+                $message = "---- " . ($counter == 0 ? "No" : $counter) . " log files deleted ----";
                 $this->helperData->log($message);
                 
             } catch (\Exception $e) {
