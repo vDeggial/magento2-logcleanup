@@ -38,12 +38,14 @@ class Cleanup
             $this->helperData->log("--- Starting Log File Cleanup ---");
             $counter = 0;
             try {
+                $maxSize = $this->helperData->getMaxSize();
+                $maxSize = !empty($maxSize) ? (int)$maxSize : 10;
+                $this->helperData->log("---- Getting log files list ----");
                 $files = $this->helperData->getLogFiles();
+                $this->helperData->log("---- Looking for any log file larger than $maxSize" . "MB in size ----");
                 foreach ($files as $file)
                 {
                     $size = $this->helperData->getFileSize($file) / 1024 / 1024;
-                    $maxSize = $this->helperData->getMaxSize();
-                    $maxSize = !empty($maxSize) ? (int)$maxSize : 10;
                     if ($size >= $maxSize)
                     {
                         $this->helperData->deleteFile($file);
@@ -52,7 +54,7 @@ class Cleanup
                     }                
                 }
                 
-                $message = "---- " . ($counter == 0 ? "No" : $counter) . " log files deleted ----";
+                $message = "---- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted ----";
                 $this->helperData->log($message);
                 
             } catch (\Exception $e) {
