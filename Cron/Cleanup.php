@@ -43,7 +43,7 @@ class Cleanup
                     $maxSize = !empty($maxSize) ? (int)$maxSize : 10;
                     $this->helperData->log("---- Getting log files list ----");
                     $files = $this->helperData->getLogFiles();
-                    $this->helperData->log("---- Looking for any log file larger than $maxSize" . "MB in size ----");
+                    $this->helperData->log("---- Looking for any log file larger than $maxSize MB in size ----");
                     foreach ($files as $file)
                     {
                         $size = $this->helperData->getFileSize($file) / 1024 / 1024;
@@ -52,7 +52,7 @@ class Cleanup
                             case true:
                                 $this->helperData->deleteFile($file);
                                 $counter++;
-                                $this->helperData->log("---- Deleted $file of size $size" . "MB ----");
+                                $this->helperData->log("---- Deleted $file of size $size MB ----");
                                 break;
                         }                
                     }
@@ -69,7 +69,6 @@ class Cleanup
                 }
         
                 return $this;
-                break;
         }
     }
 }
