@@ -32,31 +32,31 @@ class Cleanup
         switch ($this->helperData->isEnabled()) {
             case true:
                 $this->helperData->log("");
-                $this->helperData->log("--- Starting Log File Cleanup ---");
+                $this->helperData->log("Starting Log File Cleanup");
                 $counter = 0;
                 try {
                     $maxSize = $this->helperData->getMaxSize();
                     $maxSize = !empty($maxSize) ? (int)$maxSize : 10;
-                    $this->helperData->log("---- Getting log files list ----");
+                    $this->helperData->log("- Getting log files list");
                     $files = $this->helperData->getLogFiles();
-                    $this->helperData->log("---- Looking for any log file larger than $maxSize MB in size ----");
+                    $this->helperData->log("- Looking for any log file larger than $maxSize MB in size");
                     foreach ($files as $file) {
                         $size = $this->helperData->getFileSize($file) / 1024 / 1024;
                         switch ($size >= $maxSize) {
                             case true:
                                 $this->helperData->deleteFile($file);
                                 $counter++;
-                                $this->helperData->log("---- Deleted $file of size $size MB ----");
+                                $this->helperData->log("-- Deleted $file of size $size MB");
                                 break;
                         }
                     }
 
-                    $message = "---- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted ----";
+                    $message = "- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted";
                     $this->helperData->log($message);
                 } catch (\Exception $e) {
                     $this->helperData->log(sprintf('Error: %s', $e->getMessage()));
                 } finally {
-                    $this->helperData->log("--- Ending Log File Cleanup ---");
+                    $this->helperData->log("Ending Log File Cleanup");
                     return $this;
                 }
                 break;
