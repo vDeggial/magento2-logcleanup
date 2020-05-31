@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="hapex" translate="label" sortOrder="100">             
-            <label>Hapex</label> 
+        <tab id="hapex" translate="label" sortOrder="100">
+            <label>Hapex</label>
         </tab>
         <section id="hapex_logcleanup" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
@@ -19,7 +19,12 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Cron cleaning is done on schedule</comment>
                 </field>
-                <field id="max_size" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="cron_schedule" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Log Cleanup Schedule</label>
+                    <comment>(Cron Expression) | Default: 0 0 * * * (Once an Day)</comment>
+                    <validate>validate-no-empty validate-length minimum-length-9</validate>
+                </field>
+                <field id="max_size" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Maximum Log Filesize</label>
                     <comment> (Megabytes) | Default: 10</comment>
                     <validate>validate-digits</validate>

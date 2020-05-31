@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+        <default>
+            <hapex_logcleanup>
+                <general>
+                    <enable>1</enable>
+                    <cron_schedule>0 0 * * *</cron_schedule>
+                    <max_size>10</max_size>
+                </general>
+            </hapex_logcleanup>
+        </default>
+    </config>
