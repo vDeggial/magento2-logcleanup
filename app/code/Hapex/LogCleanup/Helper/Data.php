@@ -25,7 +25,7 @@ class Data extends DataHelper
 
 	public function log($message)
 	{
-		$this->printLog("hapex_log_cleanup", $message);
+		$this->helperLog->printLog("hapex_log_cleanup", $message);
 	}
 
 	public function getLogFiles()
