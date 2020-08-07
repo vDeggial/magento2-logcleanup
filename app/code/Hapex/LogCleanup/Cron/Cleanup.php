@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Hapex\LogCleanup\Cron;
 
@@ -36,7 +36,7 @@ class Cleanup
                 $counter = 0;
                 try {
                     $maxSize = $this->helperData->getMaxSize();
-                    $maxSize = !empty($maxSize) ? (int)$maxSize : 10;
+                    $maxSize = !empty($maxSize) ? (int) $maxSize : 10;
                     $this->helperData->log("- Getting log files list");
                     $files = $this->helperData->getLogFiles();
                     $this->helperData->log("- Looking for any log file larger than $maxSize MB in size");
