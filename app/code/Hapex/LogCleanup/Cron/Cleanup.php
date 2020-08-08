@@ -1,5 +1,6 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Hapex\LogCleanup\Cron;
 
@@ -9,15 +10,8 @@ use Psr\Log\LoggerInterface;
 
 class Cleanup
 {
-    /**
-     * @var ResourceConnection
-     */
     protected $resource;
-    /**
-     * @var LoggerInterface
-     */
     protected $logger;
-
     private $helperData;
 
     public function __construct(DataHelper $helperData, ResourceConnection $resource, LoggerInterface $logger)

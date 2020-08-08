@@ -1,7 +1,9 @@
 <?php
+
 namespace Hapex\LogCleanup\Helper;
 
 use Hapex\Core\Helper\DataHelper;
+use Hapex\Core\Helper\FileHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -31,7 +33,8 @@ class Data extends DataHelper
     public function getLogFiles()
     {
         $files = array();
-        foreach (glob(BP . "/var/log/*.log") as $file) {
+        $rootPath = $this->generateClassObject(FileHelper::class)->getRootPath();
+        foreach (glob($rootPath . "/var/log/*.log") as $file) {
             $files[] = $file;
         }
         return $files;
