@@ -9,10 +9,12 @@ use Magento\Framework\ObjectManagerInterface;
 
 class Data extends DataHelper
 {
-    public function __construct(Context $context, ObjectManagerInterface $objectManager)
+    protected $helperFile;
+    public function __construct(Context $context, ObjectManagerInterface $objectManager, FileHelper $helperFile)
     {
 
         parent::__construct($context, $objectManager);
+        $this->helperFile = $helperFile;
     }
 
     public function isEnabled()
@@ -33,7 +35,7 @@ class Data extends DataHelper
     public function getLogFiles()
     {
         $files = array();
-        $rootPath = $this->generateClassObject(FileHelper::class)->getRootPath();
+        $rootPath = $this->helperFile->getRootPath();
         foreach (glob($rootPath . "/var/log/*.log") as $file) {
             $files[] = $file;
         }
