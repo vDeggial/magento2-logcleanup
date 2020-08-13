@@ -29,22 +29,9 @@ class Cleanup
                 $this->helperData->log("Starting Log File Cleanup");
                 $counter = 0;
                 try {
-                    $maxSize = $this->helperData->getMaxSize();
-                    $maxSize = !empty($maxSize) ? (int) $maxSize : 10;
                     $this->helperData->log("- Getting log files list");
                     $files = $this->helperData->getLogFiles();
-                    $this->helperData->log("- Looking for any log file larger than $maxSize MB in size");
-                    foreach ($files as $file) {
-                        $size = $this->helperData->getFileSize($file) / 1024 / 1024;
-                        switch ($size >= $maxSize) {
-                            case true:
-                                $this->helperData->deleteFile($file);
-                                $counter++;
-                                $this->helperData->log("-- Deleted $file of size $size MB");
-                                break;
-                        }
-                    }
-
+                    $counter = $this->processFiles($files);
                     $message = "- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted";
                     $this->helperData->log($message);
                 } catch (\Exception $e) {
@@ -53,6 +40,35 @@ class Cleanup
                     $this->helperData->log("Ending Log File Cleanup");
                     return $this;
                 }
+                break;
+        }
+    }
+
+    private function processFiles($files = [])
+    {
+        try {
+            $counter = 0;
+            $maxSize = $this->helperData->getMaxSize();
+            $maxSize = !empty($maxSize) ? (int) $maxSize : 10;
+            $this->helperData->log("- Looking for any log file larger than $maxSize MB in size");
+            foreach ($files as $file) {
+                $this->processFile($file, $maxSize, $counter);
+            }
+        } catch (\Exception $e) {
+            $this->helperData->errorLog(__METHOD__, $e->getMessage());
+        } finally {
+            return $counter;
+        }
+    }
+
+    private function processFile($file = null, $maxSize = 0, &$counter = 0)
+    {
+        $size = $this->helperData->getFileSize($file) / 1024 / 1024;
+        switch ($size >= $maxSize) {
+            case true:
+                $this->helperData->deleteFile($file);
+                $counter++;
+                $this->helperData->log("-- Deleted $file of size $size MB");
                 break;
         }
     }
