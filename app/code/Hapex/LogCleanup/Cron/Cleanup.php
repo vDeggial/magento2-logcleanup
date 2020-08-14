@@ -28,6 +28,8 @@ class Cleanup
                 try {
                     $this->helperData->log("- Getting log files list");
                     $files = $this->helperFile->getFiles("/var/log", "log");
+                    $fileCount = count($files);
+                    $this->helperData->log("- Found $fileCount total log files");
                     $counter = $this->processFiles($files);
                     $message = "- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted";
                     $this->helperData->log($message);
