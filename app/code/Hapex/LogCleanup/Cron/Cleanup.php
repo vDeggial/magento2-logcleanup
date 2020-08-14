@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace Hapex\LogCleanup\Cron;
 
 use Hapex\LogCleanup\Helper\Data as DataHelper;
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
+use Hapex\Core\Helper\FileHelper;
 
 class Cleanup
 {
-    protected $resource;
-    protected $logger;
     private $helperData;
+    private $helperFile;
 
-    public function __construct(DataHelper $helperData, ResourceConnection $resource, LoggerInterface $logger)
+    public function __construct(DataHelper $helperData, FileHelper $helperFile)
     {
         $this->helperData = $helperData;
-        $this->resource = $resource;
-        $this->logger = $logger;
+        $this->helperFile = $helperFile;
     }
 
     public function cleanLogs()
@@ -30,7 +27,7 @@ class Cleanup
                 $counter = 0;
                 try {
                     $this->helperData->log("- Getting log files list");
-                    $files = $this->helperData->getLogFiles();
+                    $files = $this->helperFile->getFiles("/var/log", "log");
                     $counter = $this->processFiles($files);
                     $message = "- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted";
                     $this->helperData->log($message);
@@ -63,12 +60,13 @@ class Cleanup
 
     private function processFile($file = null, $maxSize = 0, &$counter = 0)
     {
-        $size = $this->helperData->getFileSize($file) / 1024 / 1024;
+        $size = $this->helperFile->getFileSize($file) / 1024 / 1024;
         switch ($size >= $maxSize) {
             case true:
-                $this->helperData->deleteFile($file);
-                $counter++;
-                $this->helperData->log("-- Deleted $file of size $size MB");
+                if ($this->helperFile->deleteFile($file)) {
+                    $counter++;
+                    $this->helperData->log("-- Deleted $file of size $size MB");
+                }
                 break;
         }
     }
