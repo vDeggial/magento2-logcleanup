@@ -63,6 +63,7 @@ class Cleanup
     private function processFile($file = null, $maxSize = 0, &$counter = 0)
     {
         $size = $this->helperFile->getFileSize($file) / 1024 / 1024;
+        $this->helperData->log("- Filesize for file $file is $size MB");
         switch ($size >= $maxSize) {
             case true:
                 if ($this->helperFile->deleteFile($file)) {
