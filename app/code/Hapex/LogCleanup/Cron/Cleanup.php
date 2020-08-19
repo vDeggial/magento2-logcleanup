@@ -1,20 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Hapex\LogCleanup\Cron;
-
-use Hapex\LogCleanup\Helper\Data as DataHelper;
+use Hapex\Core\Cron\BaseCron;
+use Hapex\Core\Helper\LogHelper;
 use Hapex\Core\Helper\FileHelper;
+use Hapex\LogCleanup\Helper\Data as DataHelper;
 
-class Cleanup
+class Cleanup extends BaseCron
 {
-    private $helperData;
     private $helperFile;
 
-    public function __construct(DataHelper $helperData, FileHelper $helperFile)
+    public function __construct(DataHelper $helperData, LogHelper $helperLog, FileHelper $helperFile)
     {
-        $this->helperData = $helperData;
+        parent::__construct($helperData, $helperLog);
         $this->helperFile = $helperFile;
     }
 
@@ -34,7 +32,7 @@ class Cleanup
                     $message = "- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted";
                     $this->helperData->log($message);
                 } catch (\Exception $e) {
-                    $this->helperData->errorLog(__METHOD__, $e->getMessage());
+                    $this->helperLog->errorLog(__METHOD__, $e->getMessage());
                 } finally {
                     $this->helperData->log("Ending Log File Cleanup");
                     return $this;
@@ -54,7 +52,7 @@ class Cleanup
                 $this->processFile($file, $maxSize, $counter);
             }
         } catch (\Exception $e) {
-            $this->helperData->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
         } finally {
             return $counter;
         }
