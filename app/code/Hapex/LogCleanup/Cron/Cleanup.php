@@ -8,7 +8,7 @@ use Hapex\LogCleanup\Helper\Data as DataHelper;
 
 class Cleanup extends BaseCron
 {
-    private $helperFile;
+    protected $helperFile;
 
     public function __construct(DataHelper $helperData, LogHelper $helperLog, FileHelper $helperFile)
     {
@@ -41,16 +41,16 @@ class Cleanup extends BaseCron
         }
     }
 
-    private function processFiles($files = [])
+    protected function processFiles($files = [])
     {
         try {
             $counter = 0;
             $maxSize = $this->helperData->getMaxSize();
             $maxSize = !empty($maxSize) ? (int) $maxSize : 10;
             $this->helperData->log("- Looking for any log file larger than $maxSize MB in size");
-            foreach ($files as $file) {
+            array_walk($files, function($file) use(&$maxSize, &$counter) {
                 $this->processFile($file, $maxSize, $counter);
-            }
+            });
         } catch (\Exception $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
         } finally {
@@ -58,7 +58,7 @@ class Cleanup extends BaseCron
         }
     }
 
-    private function processFile($file = null, $maxSize = 0, &$counter = 0)
+    protected function processFile($file = null, $maxSize = 0, &$counter = 0)
     {
         $size = $this->helperFile->getFileSize($file) / 1024 / 1024;
         $this->helperData->log("- Filesize for file $file is $size MB");
