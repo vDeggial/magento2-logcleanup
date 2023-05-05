@@ -1,6 +1,7 @@
 <?php
 
 namespace Hapex\LogCleanup\Cron;
+
 use Hapex\Core\Cron\BaseCron;
 use Hapex\Core\Helper\LogHelper;
 use Hapex\Core\Helper\FileHelper;
@@ -18,7 +19,7 @@ class Cleanup extends BaseCron
 
     public function cleanLogs()
     {
-        switch ($this->helperData->isEnabled()) {
+        switch (!$this->isMaintenance && $this->helperData->isEnabled()) {
             case true:
                 $this->helperData->log("");
                 $this->helperData->log("Starting Log File Cleanup");
@@ -48,7 +49,7 @@ class Cleanup extends BaseCron
             $maxSize = $this->helperData->getMaxSize();
             $maxSize = !empty($maxSize) ? (int) $maxSize : 10;
             $this->helperData->log("- Looking for any log file larger than $maxSize MB in size");
-            array_walk($files, function($file) use(&$maxSize, &$counter) {
+            array_walk($files, function ($file) use (&$maxSize, &$counter) {
                 $this->processFile($file, $maxSize, $counter);
             });
         } catch (\Throwable $e) {
