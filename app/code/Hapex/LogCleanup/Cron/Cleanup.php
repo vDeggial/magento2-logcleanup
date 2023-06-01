@@ -33,7 +33,7 @@ class Cleanup extends BaseCron
                     $message = "- " . ($counter == 0 ? "No" : $counter) . " overgrown log files found and deleted";
                     $this->helperData->log($message);
                 } catch (\Throwable $e) {
-                    $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+                    $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
                 } finally {
                     $this->helperData->log("Ending Log File Cleanup");
                     return $this;
@@ -53,7 +53,7 @@ class Cleanup extends BaseCron
                 $this->processFile($file, $maxSize, $counter);
             });
         } catch (\Throwable $e) {
-            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
         } finally {
             return $counter;
         }
